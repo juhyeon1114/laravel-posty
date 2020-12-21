@@ -30,6 +30,14 @@
 
                         <p class="mb-2">{{ $post->body }}</p>
 
+                        @can('delete', $post)
+                            <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500">Delete</button>
+                            </form>
+                        @endcan
+
                         <div class="flex items-center">
                             @auth
                                 @if (!$post->likedBy(auth()->user()))
@@ -44,8 +52,9 @@
                                         <button type="submit" class="text-blue-500">Unlike</button>
                                     </form>
                                 @endif
-                                <span>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</span>
                             @endauth
+
+                            <span>{{ $post->likes->count() }} {{ Str::plural('like', $post->likes->count()) }}</span>
                         </div>
                     </div>
                 @endforeach

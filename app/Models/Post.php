@@ -20,6 +20,12 @@ class Post extends Model
         return $this->likes->contains('user_id', $user->id);
     }
 
+    // public function ownedBy(User $user)
+    // {
+    //     return $user->id === $this->user_id;
+    // }
+    // policy로 대체
+
     public function user()
     {
         return $this->belongsTo(User::class);
