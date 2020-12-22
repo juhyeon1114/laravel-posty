@@ -24,8 +24,11 @@ class PostLikeController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        // mailing
-        Mail::to($post->user)->send(new PostLiked(auth()->user(), $post));
+        // mailing (처음 like를 누른 경우만)
+        if (!$post->likes()->onlyTrashed()->where('user_id', $request->user()->id)->count()) { // $post->likes()->onlyTrashed() 는 soft delete된 것들을 return 한다
+            Mail::to($post->user)->send(new PostLiked(auth()->user(), $post));
+        }
+        
 
         return back();
     }
